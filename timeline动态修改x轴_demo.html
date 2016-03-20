@@ -1,0 +1,153 @@
+<!doctype html style="width: 100%; height: 100%"><head><meta charset="utf-8"></head><body style="width: 100%; height: 100%; margin: 0">
+<div id="container" style="width: 100%; height: 100%"></div>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts-all-3.0.0.js"></script>
+<script type="text/javascript">
+var dom = document.getElementById("container");
+var myChart = echarts.init(dom);var app = {};option = null;var dataMap = {};
+
+dataMap.dataGDP = {
+    2006:[8117.78,4462.74,11467.6,4878.61,4944.25],
+    2005:[6969.52,3905.64,10012.11,4230.53,3905.03],
+    2004:[6033.21,3110.97,8477.63,3571.37,3041.07],
+    2003:[5007.21,2578.03,6921.29,2855.23,2388.38],
+    2002:[4315,2150.76,6018.28,2324.8,1940.94]
+};
+
+option = {
+    baseOption: {
+        timeline: {
+            show : true,
+            axisType: 'category',
+            autoPlay: true,
+            playInterval: 2000,
+            data: [
+                '2002-01-01','2003-01-01','2004-01-01',
+                {
+                    value: '2005-01-01',
+                    tooltip: {
+                        formatter: '{b} GDP达到一个高度'
+                    },
+                    symbol: 'diamond',
+                    symbolSize: 16
+                },
+                '2006-01-01'
+            ],
+            label: {
+                formatter : function(s) {
+                    return (new Date(s)).getFullYear();
+                }
+            }
+        },
+        title: {
+            subtext: 'echarts3使用timeline动态修改x轴'
+        },
+        tooltip: {},
+        legend: {
+            x: 'right',
+            data: ['GDP'],
+        },
+        calculable : true,
+        grid: {
+            top: 80,
+            bottom: 100
+        },
+        xAxis: [
+            {
+                'type':'category',
+                'axisLabel':{'interval':0},
+                'data':[
+                    '北京','\n天津','河北','\n山西','内蒙古'
+                ],
+                splitLine: {show: false}
+            }
+        ],
+        yAxis: [
+            {
+                type: 'value',
+                name: 'GDP（亿元）',
+                // max: 53500
+                max: 30000
+            }
+        ],
+        series: [
+            {name: 'GDP', type: 'bar'}
+        ]
+    },
+    options: [
+        {
+            title: {text: '2002全国宏观经济指标'},
+            xAxis:{
+            },
+
+            series: [
+                {data: dataMap.dataGDP['2002']},
+            ]
+        },
+        {
+            title : {text: '2003全国宏观经济指标'},
+            xAxis:{
+            },
+            series : [
+                {data: dataMap.dataGDP['2003']},
+            ]
+        },
+        {
+            title : {text: '2004全国宏观经济指标'},
+            xAxis:{
+            },
+            series : [
+                {data: dataMap.dataGDP['2004']},
+            ]
+        },
+        {
+            title : {text: '2005全国宏观经济指标'},
+            xAxis:{
+            },
+            series : [
+                {data: dataMap.dataGDP['2005']},
+            ]
+        },
+        {
+            title : {text: '2006全国宏观经济指标'},
+            xAxis:{
+            },
+            series : [
+                {data: dataMap.dataGDP['2006']},
+            ]
+        }
+    ]
+};;if (option && typeof option === "object") {
+    
+    var data = [
+    [
+        '北京','\n天津','河北','\n山西','内蒙古'
+    ],
+    [
+        '北京test2','\n天津test2','河北test2','\n山西test2','内蒙古test2'
+    ],
+    [
+        '北京test3','\n天津test3','河北test3','\n山西test3','内蒙古test3'
+    ],
+    [
+        '北京test4','\n天津test4','河北test4','\n山西test4','内蒙古test4'
+    ],
+    [
+        '北京test5','\n天津test5','河北test5','\n山西test5','内蒙古test5'
+    ]
+    ];
+
+myChart.setOption(option, true);
+
+// timelineIndex为当前timeline的节点
+// 注意:timelineIndex的值为1时,是从当前第二个节点开始算的,跟数组的索引一样.
+    myChart.on('timelinechanged', function(timelineIndex){
+        // 设置 每个series里的xAxis里的值
+        var arrIndex =  parseInt(timelineIndex.currentIndex);
+        if (arrIndex == 5) // 这里 10可理解为 节点数组的长度,此处的目的是防止 5.xAxis not found
+            arrIndex = 0
+       option.options[arrIndex].xAxis.data=data[arrIndex];
+       myChart.setOption(option);
+    });
+}
+    </script>
+</body></html>
